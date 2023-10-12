@@ -34,20 +34,18 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request) : RedirectResponse
     {
         Product::create($request->all());
-        return redirect('/products')
+        return redirect()->route('products.index')
                 ->withSuccess('New product is added successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id) : View
+    public function show(Product $product) : View
     {
-        $product = Product::findOrFail($id);
-        return view('products.show', 
-            // 'product' => $product
-            compact('product')
-        );
+        return view('products.show', [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -66,7 +64,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product) : RedirectResponse
     {
         $product->update($request->all());
-        return redirect('/products')->back()
+        return redirect()->back()
                 ->withSuccess('Product is updated successfully.');
     }
 
@@ -76,7 +74,7 @@ class ProductController extends Controller
     public function destroy(Product $product) : RedirectResponse
     {
         $product->delete();
-        return redirect('/products')
+        return redirect()->route('products.index')
                 ->withSuccess('Product is deleted successfully.');
     }
 }
